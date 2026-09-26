@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 
 load_dotenv()
@@ -13,6 +14,11 @@ DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
 
 # Application definition
 
@@ -24,9 +30,24 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "rest_framework",
+    "drf_spectacular",
     "events",
 
 ]
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Event Registration API",
+    "DESCRIPTION": "API for managing events and user registrations",
+    "VERSION": "1.0.0",
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
